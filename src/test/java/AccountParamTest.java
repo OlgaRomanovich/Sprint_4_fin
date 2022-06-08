@@ -6,14 +6,15 @@ import org.junit.runners.Parameterized;
 import static org.junit.Assert.assertEquals;
 
 @RunWith(Parameterized.class)
-public class AccountTest {
+public class AccountParamTest {
     private final String name;
     private final boolean expected;
 
-    public AccountTest(String name, boolean expected) {
+    public AccountParamTest(String name, boolean expected) {
         this.name = name;
         this.expected = expected;
     }
+
     @Parameterized.Parameters
     public static Object[] checkNames() {
         return new Object[][]{
@@ -22,9 +23,10 @@ public class AccountTest {
                 {" ОльгаРоманович", false},
                 {"ОльгаРоманович ", false},
                 {"Ольга  Романович", false},
-                {"", false},
+                {null, false},
         };
     }
+
     @Test
     public void checkNameLengthAndWhiteSpace() {
         Account account = new Account(name);
@@ -32,8 +34,4 @@ public class AccountTest {
         assertEquals(expected, actual);
     }
 }
-   // @Test
-   // public void checkNullName() {
-      //  String name = null;
-       // Account account = new Account(name);
-       // Assert.assertFalse(account.checkNameToEmboss());
+
