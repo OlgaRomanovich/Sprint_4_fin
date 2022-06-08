@@ -1,48 +1,39 @@
 import org.junit.Assert;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.Parameterized;
 
+import static org.junit.Assert.assertEquals;
+
+@RunWith(Parameterized.class)
 public class AccountTest {
+    private final String name;
+    private final boolean expected;
+
+    public AccountTest(String name, boolean expected) {
+        this.name = name;
+        this.expected = expected;
+    }
+    @Parameterized.Parameters
+    public static Object[] checkNames() {
+        return new Object[][]{
+                {"Ольга Романович", true},
+                {"Ольга РомановичЛеонидовна", false},
+                {" ОльгаРоманович", false},
+                {"ОльгаРоманович ", false},
+                {"Ольга  Романович", false},
+                {"", false},
+        };
+    }
     @Test
-    public void checkCorrectNameLength() {
-        String name = "Ольга Романович";
+    public void checkNameLengthAndWhiteSpace() {
         Account account = new Account(name);
-        Assert.assertTrue(account.checkNameToEmboss());
-    }
-    @Test
-    public void checkLongNameLength() {
-        String name= "Ольга РомановичЛеонидовна";
-        Account account=new Account(name);
-        Assert.assertFalse(account.checkNameToEmboss());
-    }
-    @Test
-    public void checkShortNameLength() {
-        String name= "Ол";
-        Account account=new Account(name);
-        Assert.assertFalse(account.checkNameToEmboss());
-    }
-    @Test
-    public void checkOneWhiteSpaceInTheMiddle() {
-        String name = "Иван Петров";
-        Account account = new Account(name);
-        Assert.assertTrue(account.checkNameToEmboss());
-    }
-    @Test
-    public void checkTwoWhiteSpaceInTheMiddle() {
-        String name = "Иван  Петров";
-        Account account = new Account(name);
-        Assert.assertFalse(account.checkNameToEmboss());
-    }
-    @Test
-    public void checkNameStartsWithWhiteSpace() {
-        String name = " ИванПетров";
-        Account account = new Account(name);
-        Assert.assertFalse(account.checkNameToEmboss());
-    }
-    @Test
-    public void checkNameEndsWhiteSpace() {
-        String name = "ИванПетров ";
-        Account account = new Account(name);
-        Assert.assertFalse(account.checkNameToEmboss());
+        boolean actual = account.checkNameToEmboss();
+        assertEquals(expected, actual);
     }
 }
-
+   // @Test
+   // public void checkNullName() {
+      //  String name = null;
+       // Account account = new Account(name);
+       // Assert.assertFalse(account.checkNameToEmboss());
